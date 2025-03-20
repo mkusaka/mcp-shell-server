@@ -70,6 +70,12 @@ Displays the following information at startup:
 - Transport: StdioServerTransport
 - Supported tools:
   - `shell_exec`: Shell command execution
+- Supported resources:
+  - `hostname://`: Returns system hostname
+  - `platform://`: Returns operating system platform
+  - `shell://`: Returns shell path in use
+  - `username://`: Returns current username
+  - `system-info://`: Returns comprehensive system information in JSON format
 
 ### Shell Command Execution Interface
 

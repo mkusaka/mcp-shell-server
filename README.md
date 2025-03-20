@@ -77,6 +77,46 @@ Executes commands in the specified shell.
 Parameters:
 - `command` (string, required): The shell command to execute
 
+## Resource Reference
+
+The server provides the following system information as resources:
+
+### hostname
+
+Returns the hostname of the system.
+
+URI: `hostname://`
+
+### platform
+
+Returns the operating system platform.
+
+URI: `platform://`
+
+### shell
+
+Returns the shell path being used by the server.
+
+URI: `shell://`
+
+### username
+
+Returns the current username.
+
+URI: `username://`
+
+### system-info
+
+Returns comprehensive system information in JSON format, including:
+- hostname
+- platform
+- shell
+- username
+- CPU count
+- Total memory
+- Free memory
+- System uptime
+
 ### Usage Examples
 
 #### Basic Command Execution

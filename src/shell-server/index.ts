@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { program } from "commander";
 import { z } from "zod";
@@ -50,6 +50,72 @@ const server = new McpServer({
   name: "@mkusaka/mcp-shell-server",
   version: "0.1.0"
 });
+
+// System information resources
+server.resource(
+  "hostname",
+  new ResourceTemplate("hostname://", { list: undefined }),
+  async (uri) => ({
+    contents: [{
+      uri: uri.href,
+      text: os.hostname()
+    }]
+  })
+);
+
+server.resource(
+  "platform",
+  new ResourceTemplate("platform://", { list: undefined }),
+  async (uri) => ({
+    contents: [{
+      uri: uri.href,
+      text: os.platform()
+    }]
+  })
+);
+
+server.resource(
+  "shell",
+  new ResourceTemplate("shell://", { list: undefined }),
+  async (uri) => ({
+    contents: [{
+      uri: uri.href,
+      text: shell
+    }]
+  })
+);
+
+server.resource(
+  "username",
+  new ResourceTemplate("username://", { list: undefined }),
+  async (uri) => ({
+    contents: [{
+      uri: uri.href,
+      text: os.userInfo().username
+    }]
+  })
+);
+
+// Combined system information resource
+server.resource(
+  "system-info",
+  new ResourceTemplate("system-info://", { list: undefined }),
+  async (uri) => ({
+    contents: [{
+      uri: uri.href,
+      text: JSON.stringify({
+        hostname: os.hostname(),
+        platform: os.platform(),
+        shell: shell,
+        username: os.userInfo().username,
+        cpus: os.cpus().length,
+        totalmem: os.totalmem(),
+        freemem: os.freemem(),
+        uptime: os.uptime()
+      }, null, 2)
+    }]
+  })
+);
 
 // Shell command execution tool configuration
 server.tool(
