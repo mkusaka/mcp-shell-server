@@ -7,6 +7,7 @@ import { z } from "zod";
 import { $, ProcessOutput } from "zx";
 import { logger } from "./lib/logger.js";
 import os from "os";
+import getShell from "./shell-config.js";
 
 // CLI configuration
 program
@@ -16,22 +17,8 @@ program
   .option("-s, --shell <shell>", "Specify the path to the shell to use");
 
 program.parse();
-const options = program.opts();
 
-// Shell configuration
-const getShell = (): string => {
-  if (options.shell) {
-    return options.shell;
-  }
-  
-  if (process.env.SHELL) {
-    return process.env.SHELL;
-  }
-  
-  // Set default shell based on OS
-  return os.platform() === "win32" ? "cmd.exe" : "/bin/bash";
-};
-
+// Get the shell to use
 const shell = getShell();
 
 // Display server information
