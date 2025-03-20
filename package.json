@@ -1,0 +1,47 @@
+{
+  "name": "@mkusaka/mcp-shell-server",
+  "version": "0.1.0",
+  "description": "A server that uses the Model Context Protocol (MCP) to execute shell commands",
+  "author": "mkusaka",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mkusaka/mcp-shell-server.git"
+  },
+  "keywords": [
+    "mcp",
+    "shell",
+    "ai",
+    "model-context-protocol"
+  ],
+  "type": "module",
+  "bin": {
+    "mcp-shell": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc && shx chmod +x dist/index.js",
+    "start": "node dist/index.js",
+    "dev": "tsc -w",
+    "inspect": "mcp-inspector dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.4.0",
+    "commander": "^11.1.0",
+    "winston": "^3.11.0",
+    "zod": "^3.22.4",
+    "zx": "^7.2.3"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/inspector": "^0.4.0",
+    "@types/node": "^20.11.19",
+    "shx": "^0.3.4",
+    "typescript": "^5.3.3"
+  }
+}
