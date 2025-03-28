@@ -38,6 +38,36 @@ pnpm install
 pnpm build
 ```
 
+## MCP Configuration
+
+### Cursor Configuration
+
+Add the following to your Cursor configuration file (`~/.cursor/config.json`):
+
+```json
+{
+  "mcpServers": {
+    "shell": {
+      "command": "npx",
+      "args": ["-y", "@mkusaka/mcp-shell-server"]
+    }
+  }
+}
+```
+
+### Rule Configuration
+
+Add the following to your Cursor rules file:
+
+```
+You have tools at your disposal to solve the coding task. Follow these rules regarding tool calls:
+1. ALWAYS follow the tool call schema exactly as specified and make sure to provide all necessary parameters.
+2. The conversation may reference tools that are no longer available. NEVER call tools that are not explicitly provided.
+3. **NEVER refer to tool names when speaking to the USER.** For example, instead of saying 'I need to use the shell_exec tool to execute your command', just say 'I will execute your command'.
+4. Only calls tools when they are necessary. If the USER's task is general or you already know the answer, just respond without calling tools.
+5. Before calling each tool, first explain to the USER why you are calling it.
+```
+
 ## Usage
 
 ### Direct Execution
