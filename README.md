@@ -151,6 +151,7 @@ pnpm inspect
 Executes commands in the specified shell.
 
 Parameters:
+
 - `command` (string, required): The shell command to execute
 - `workingDir` (string, optional): The working directory to execute the command in. Must be under $HOME.
 
@@ -185,6 +186,7 @@ URI: `username://`
 ### system-info
 
 Returns comprehensive system information in JSON format, including:
+
 - hostname
 - platform
 - shell
