@@ -35,7 +35,9 @@ export const isUnderHome = (dirPath: string): boolean => {
   const absoluteDirPath = path.resolve(dirPath);
   const absoluteHomePath = path.resolve(homePath);
   
-  return absoluteDirPath.startsWith(absoluteHomePath);
+  const relativePath = path.relative(absoluteHomePath, absoluteDirPath);
+  
+  return !relativePath.startsWith('..') && !path.isAbsolute(relativePath);
 };
 
 // Get working directory configuration
