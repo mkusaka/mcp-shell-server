@@ -8,23 +8,19 @@ const getShell = (): string => {
     return process.env.SHELL;
   }
   
-  try {
-    const shellProgram = new Command();
-    shellProgram
-      .name("mcp-shell")
-      .description("MCP Shell Server - A server for executing shell commands")
-      .version("0.1.0")
-      .option("-s, --shell <shell>", "Specify the path to the shell to use");
-    
-    shellProgram.parse(process.argv);
-    
-    const options = shellProgram.opts();
-    
-    if (options.shell) {
-      return options.shell;
-    }
-  } catch (error) {
-    console.error("Error parsing command line options:", error);
+  const shellProgram = new Command();
+  shellProgram
+    .name("mcp-shell")
+    .description("MCP Shell Server - A server for executing shell commands")
+    .version("0.1.0")
+    .option("-s, --shell <shell>", "Specify the path to the shell to use");
+  
+  shellProgram.parse(process.argv);
+  
+  const options = shellProgram.opts();
+  
+  if (options.shell) {
+    return options.shell;
   }
   
   // Set default shell based on OS
@@ -44,23 +40,19 @@ export const isUnderHome = (dirPath: string): boolean => {
 
 // Get working directory configuration
 export const getWorkingDir = (): string => {
-  try {
-    const workingDirProgram = new Command();
-    workingDirProgram
-      .name("mcp-shell")
-      .description("MCP Shell Server - A server for executing shell commands")
-      .version("0.1.0")
-      .option("-w, --working-dir <directory>", "Specify the working directory for command execution");
-    
-    workingDirProgram.parse(process.argv);
-    
-    const options = workingDirProgram.opts();
-    
-    if (options.workingDir) {
-      return options.workingDir;
-    }
-  } catch (error) {
-    console.error("Error parsing command line options:", error);
+  const workingDirProgram = new Command();
+  workingDirProgram
+    .name("mcp-shell")
+    .description("MCP Shell Server - A server for executing shell commands")
+    .version("0.1.0")
+    .option("-w, --working-dir <directory>", "Specify the working directory for command execution");
+  
+  workingDirProgram.parse(process.argv);
+  
+  const options = workingDirProgram.opts();
+  
+  if (options.workingDir) {
+    return options.workingDir;
   }
   
   return os.homedir();
