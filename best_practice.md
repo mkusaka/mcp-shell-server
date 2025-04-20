@@ -27,10 +27,12 @@ src/
 ### Best Practices
 
 1. **Avoid console output in MCP servers**
+
    - Console output can interfere with the MCP protocol's stdout/stdin communication
    - Use file-based logging instead
 
 2. **Configure a proper logger**
+
    ```typescript
    // lib/logger.ts
    import winston from "winston";
@@ -40,14 +42,14 @@ src/
      level: "info",
      format: winston.format.combine(
        winston.format.timestamp(),
-       winston.format.json()
+       winston.format.json(),
      ),
      transports: [
-       new winston.transports.File({ 
-         filename: path.join(process.cwd(), "your-server.log")
-       })
+       new winston.transports.File({
+         filename: path.join(process.cwd(), "your-server.log"),
+       }),
        // Console output is disabled to avoid interfering with MCP protocol communication
-     ]
+     ],
    });
    ```
 
@@ -64,7 +66,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 
 const server = new McpServer({
   name: "your-server-name",
-  version: "1.0.0"
+  version: "1.0.0",
 });
 
 // Configure tools, connect transports, etc.
@@ -95,18 +97,20 @@ server.tool(
     // Define parameters with validation
     required_param: z.string().min(1),
     optional_param: z.number().optional(),
-    enum_param: z.enum(["option1", "option2", "option3"]).default("option1")
+    enum_param: z.enum(["option1", "option2", "option3"]).default("option1"),
   },
   async ({ required_param, optional_param, enum_param }) => {
     // Tool implementation
     // ...
     return {
-      content: [{ 
-        type: "text", 
-        text: "Result of operation" 
-      }]
+      content: [
+        {
+          type: "text",
+          text: "Result of operation",
+        },
+      ],
     };
-  }
+  },
 );
 ```
 
@@ -123,33 +127,39 @@ server.tool(
   "example_tool",
   "Description of what the tool does",
   {
-    param: z.string()
+    param: z.string(),
   },
   async ({ param }) => {
     try {
       // Main operation
       const result = await someOperation(param);
-      
+
       return {
-        content: [{ 
-          type: "text", 
-          text: result 
-        }]
+        content: [
+          {
+            type: "text",
+            text: result,
+          },
+        ],
       };
     } catch (error) {
       // Log the error
-      logger.error(`Error in example_tool: ${error instanceof Error ? error.message : String(error)}`);
-      
+      logger.error(
+        `Error in example_tool: ${error instanceof Error ? error.message : String(error)}`,
+      );
+
       // Return error response
       return {
-        content: [{ 
-          type: "text", 
-          text: `Error: ${error instanceof Error ? error.message : String(error)}` 
-        }],
-        isError: true
+        content: [
+          {
+            type: "text",
+            text: `Error: ${error instanceof Error ? error.message : String(error)}`,
+          },
+        ],
+        isError: true,
       };
     }
-  }
+  },
 );
 ```
 
@@ -211,9 +221,7 @@ Set up npm scripts to facilitate testing:
   "bin": {
     "your-server-name": "dist/index.js"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "publishConfig": {
     "access": "public"
   },
@@ -252,11 +260,13 @@ Include:
 ## Security Considerations
 
 1. **Input Validation**
+
    - Always validate and sanitize user inputs
    - Use Zod for parameter validation
    - Be cautious with dynamic code execution
 
 2. **Environment Variables**
+
    - Use environment variables for secrets and configuration
    - Provide clear documentation on required environment variables
    - Validate environment variables at startup
@@ -268,6 +278,7 @@ Include:
 ## Performance
 
 1. **Efficient Resource Usage**
+
    - Close connections and free resources when done
    - Be mindful of memory usage, especially for large responses
    - Use streams for large data transfers when appropriate
@@ -280,6 +291,7 @@ Include:
 ## Monitoring and Debugging
 
 1. **Structured Logging**
+
    - Use structured logging format (JSON)
    - Include context information in logs
    - Log at appropriate levels (info, warn, error)
@@ -291,6 +303,7 @@ Include:
 ## Conclusion
 
 By following these best practices, you'll create MCP servers that are:
+
 - Robust and reliable
 - Well-documented and maintainable
 - Secure and performant

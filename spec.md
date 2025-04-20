@@ -37,6 +37,7 @@ The MCP Shell Server is a server that uses the Model Context Protocol (MCP) to e
 ### 3. Server Information
 
 Displays the following information at startup:
+
 - Shell in use
 - Platform
 - Hostname
