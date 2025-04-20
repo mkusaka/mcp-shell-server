@@ -139,6 +139,7 @@ pnpm inspect
 
 ```
 -s, --shell <shell>  Specify the path to the shell to use
+-w, --working-dir <directory>  Specify the working directory for command execution
 -h, --help           Display help message
 -V, --version        Display version information
 ```
@@ -151,6 +152,7 @@ Executes commands in the specified shell.
 
 Parameters:
 - `command` (string, required): The shell command to execute
+- `workingDir` (string, optional): The working directory to execute the command in. Must be under $HOME.
 
 ## Resource Reference
 

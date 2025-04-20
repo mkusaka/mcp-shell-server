@@ -50,7 +50,9 @@ vi.mock('os', async () => {
 // Mock shell config
 vi.mock('../shell-config.js', () => {
   return {
-    default: vi.fn().mockReturnValue('/bin/test/bash')
+    default: vi.fn().mockReturnValue('/bin/test/bash'),
+    getWorkingDir: vi.fn().mockReturnValue('/home/test-user'),
+    isUnderHome: vi.fn().mockImplementation((path) => path.startsWith('/home/test-user'))
   };
 });
 

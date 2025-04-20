@@ -4,10 +4,12 @@ import { mockMcpServer, mockZx } from './test-utils';
 // Mock zx module
 vi.mock('zx', () => {
   return {
-    $: vi.fn().mockResolvedValue({
+    $: vi.fn().mockImplementation(() => Promise.resolve({
       stdout: 'test output',
       stderr: '',
-    }),
+      exitCode: 0,
+      signal: null
+    })),
   };
 });
 
@@ -20,7 +22,11 @@ vi.mock('@modelcontextprotocol/sdk/server/mcp.js', () => {
 });
 
 // Mock other dependencies
-vi.mock('../shell-config.js', () => ({ default: vi.fn().mockReturnValue('/bin/bash') }));
+vi.mock('../shell-config.js', () => ({ 
+  default: vi.fn().mockReturnValue('/bin/bash'),
+  getWorkingDir: vi.fn().mockReturnValue('/home/test-user'),
+  isUnderHome: vi.fn().mockImplementation((path) => path.startsWith('/home/test-user'))
+}));
 vi.mock('./lib/logger.js', () => ({ logger: { info: vi.fn(), error: vi.fn() } }));
 
 describe('Shell Exec Tool', () => {
@@ -61,10 +67,12 @@ describe('Shell Exec Tool', () => {
     vi.mocked($).mockResolvedValueOnce({
       stdout: 'command output',
       stderr: '',
+      exitCode: 0,
+      signal: null
     });
     
     // Act
-    const result = await shellExecHandler({ command: 'echo test' });
+    const result = await shellExecHandler({ command: 'echo test', workingDir: '/home/test-user' });
     
     // Assert
     expect($).toHaveBeenCalled();
@@ -83,11 +91,13 @@ describe('Shell Exec Tool', () => {
     Object.assign(error, {
       stdout: '',
       stderr: 'error message',
+      exitCode: 1,
+      signal: null
     });
     vi.mocked($).mockRejectedValueOnce(error);
     
     // Act
-    const result = await shellExecHandler({ command: 'invalid-command' });
+    const result = await shellExecHandler({ command: 'invalid-command', workingDir: '/home/test-user' });
     
     // Assert
     expect(result).toEqual({
