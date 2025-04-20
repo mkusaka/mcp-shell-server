@@ -29,7 +29,7 @@
     "start": "node dist/index.js",
     "dev": "tsc -w",
     "inspect": "mcp-inspector dist/index.js",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "pnpm run build",
     "prettier:format": "prettier --write .",
     "prettier:format:check": "prettier --check .",
     "test": "vitest run",
