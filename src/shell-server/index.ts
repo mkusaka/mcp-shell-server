@@ -2,21 +2,12 @@
 
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { program } from "commander";
+import { Command } from "commander";
 import { z } from "zod";
 import { $, ProcessOutput } from "zx";
 import { logger } from "./lib/logger.js";
 import os from "os";
 import getShell from "./shell-config.js";
-
-// CLI configuration
-program
-  .name("mcp-shell")
-  .description("MCP Shell Server - A server for executing shell commands")
-  .version("0.1.0")
-  .option("-s, --shell <shell>", "Specify the path to the shell to use");
-
-program.parse();
 
 // Get the shell to use
 const shell = getShell();
