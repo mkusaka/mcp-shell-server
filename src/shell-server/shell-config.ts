@@ -1,28 +1,30 @@
-import { program } from "commander";
+import { Command } from "commander";
 import os from "os";
 import path from "path";
 
 // Shell configuration
 const getShell = (): string => {
-  // Initialize program if not already done
-  if (!program.opts) {
-    program
+  if (process.env.SHELL) {
+    return process.env.SHELL;
+  }
+  
+  try {
+    const shellProgram = new Command();
+    shellProgram
       .name("mcp-shell")
       .description("MCP Shell Server - A server for executing shell commands")
       .version("0.1.0")
       .option("-s, --shell <shell>", "Specify the path to the shell to use");
     
-    program.parse();
-  }
-
-  const options = program.opts();
-  
-  if (options.shell) {
-    return options.shell;
-  }
-  
-  if (process.env.SHELL) {
-    return process.env.SHELL;
+    shellProgram.parse(process.argv);
+    
+    const options = shellProgram.opts();
+    
+    if (options.shell) {
+      return options.shell;
+    }
+  } catch (error) {
+    console.error("Error parsing command line options:", error);
   }
   
   // Set default shell based on OS
@@ -42,22 +44,23 @@ export const isUnderHome = (dirPath: string): boolean => {
 
 // Get working directory configuration
 export const getWorkingDir = (): string => {
-  // Initialize program if not already done
-  if (!program.opts) {
-    program
+  try {
+    const workingDirProgram = new Command();
+    workingDirProgram
       .name("mcp-shell")
       .description("MCP Shell Server - A server for executing shell commands")
       .version("0.1.0")
-      .option("-s, --shell <shell>", "Specify the path to the shell to use")
       .option("-w, --working-dir <directory>", "Specify the working directory for command execution");
     
-    program.parse();
-  }
-
-  const options = program.opts();
-  
-  if (options.workingDir) {
-    return options.workingDir;
+    workingDirProgram.parse(process.argv);
+    
+    const options = workingDirProgram.opts();
+    
+    if (options.workingDir) {
+      return options.workingDir;
+    }
+  } catch (error) {
+    console.error("Error parsing command line options:", error);
   }
   
   return os.homedir();

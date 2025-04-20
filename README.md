@@ -55,17 +55,62 @@ Add the following to your Cursor configuration file (`~/.cursor/config.json`):
 }
 ```
 
+### Cline Integration
+
+[Cline](https://github.com/saoudrizwan/cline) is a VS Code extension that allows you to use MCP servers with Claude AI. To set up this MCP shell server with Cline:
+
+1. Open your Cline MCP settings file:
+
+   - macOS: `~/Library/Application Support/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`
+   - Windows: `%APPDATA%/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`
+   - Linux: `~/.config/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`
+
+2. Add the shell server MCP configuration:
+
+   ```json
+   {
+     "mcpServers": {
+       "shell": {
+         "command": "npx",
+         "args": ["-y", "@mkusaka/mcp-shell-server"],
+         "disabled": false,
+         "autoApprove": []
+       }
+     }
+   }
+   ```
+
+   Alternatively, if you want to use a locally installed package:
+
+   ```json
+   {
+     "mcpServers": {
+       "shell": {
+         "command": "node",
+         "args": ["/path/to/mcp-shell-server/dist/index.js"],
+         "disabled": false,
+         "autoApprove": []
+       }
+     }
+   }
+   ```
+
 ### Rule Configuration
 
-Add the following to your Cursor rules file:
+Add the following to your AI assistant's rules or prompt:
 
 ```
-You have tools at your disposal to solve the coding task. Follow these rules regarding tool calls:
+You have MCP Shell tools at your disposal. Follow these rules regarding Shell tool usage:
 1. ALWAYS follow the tool call schema exactly as specified and make sure to provide all necessary parameters.
-2. The conversation may reference tools that are no longer available. NEVER call tools that are not explicitly provided.
-3. **NEVER refer to tool names when speaking to the USER.** For example, instead of saying 'I need to use the shell_exec tool to execute your command', just say 'I will execute your command'.
-4. Only calls tools when they are necessary. If the USER's task is general or you already know the answer, just respond without calling tools.
-5. Before calling each tool, first explain to the USER why you are calling it.
+2. **NEVER refer to tool names when speaking to me.** For example, instead of saying 'I need to use the shell_exec tool to run this command', just say 'I'll run that command for you'.
+3. Only use Shell tools when they are necessary. If my task is general or you already know the answer, just respond without calling tools.
+4. When I ask you to execute shell commands, use the appropriate tool to:
+   - Run single-line commands
+   - Run multi-line commands (using heredoc syntax when appropriate)
+   - Execute file operations, git commands, or system utilities
+   - Provide system information when relevant
+5. Always be careful with shell commands that might modify the system, and explain what the command will do before executing it.
+6. If a shell command produces an error, explain what went wrong in simple terms and suggest ways to fix it.
 ```
 
 ## Usage

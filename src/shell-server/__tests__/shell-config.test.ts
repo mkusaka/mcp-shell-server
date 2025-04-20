@@ -8,28 +8,29 @@ const mockPlatform = vi.fn();
 const mockOpts = vi.fn();
 
 // Mock the modules outside of the tests
-vi.mock('os', async () => {
-  const actual = await vi.importActual('os');
+vi.mock('os', () => {
   return {
-    ...actual,
     platform: mockPlatform,
     default: {
-      ...actual.default,
       platform: mockPlatform
     }
   };
 });
 
-vi.mock('commander', () => ({
-  program: {
-    name: vi.fn().mockReturnThis(),
-    description: vi.fn().mockReturnThis(),
-    version: vi.fn().mockReturnThis(),
-    option: vi.fn().mockReturnThis(),
-    parse: vi.fn(),
-    opts: mockOpts
-  }
-}));
+vi.mock('commander', () => {
+  return {
+    Command: vi.fn().mockImplementation(() => {
+      return {
+        name: vi.fn().mockReturnThis(),
+        description: vi.fn().mockReturnThis(),
+        version: vi.fn().mockReturnThis(),
+        option: vi.fn().mockReturnThis(),
+        parse: vi.fn(),
+        opts: mockOpts
+      };
+    })
+  };
+});
 
 vi.mock('../lib/logger.js', () => ({
   logger: {
@@ -37,6 +38,25 @@ vi.mock('../lib/logger.js', () => ({
     error: vi.fn()
   }
 }));
+
+// Mock the shell-config module for all tests
+vi.mock('../shell-config.js', () => {
+  // Default implementation that can be overridden in individual tests
+  return {
+    default: () => {
+      if (process.env.SHELL) {
+        return process.env.SHELL;
+      }
+      
+      const options = mockOpts();
+      if (options.shell) {
+        return options.shell;
+      }
+      
+      return mockPlatform() === 'win32' ? 'cmd.exe' : '/bin/bash';
+    }
+  };
+});
 
 describe('Shell configuration', () => {
   beforeEach(() => {
