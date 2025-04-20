@@ -120,10 +120,24 @@ server.tool(
   "shell_exec",
   "Executes commands in the specified shell with detailed error handling and output capture",
   {
-    command: z.string().min(1).describe("The shell command to execute in the configured shell environment"),
-    workingDir: workingDir 
-      ? z.string().optional().describe("Optional working directory to execute the command in (must be under $HOME for security)") 
-      : z.string().describe("Working directory to execute the command in (must be under $HOME for security)"),
+    command: z
+      .string()
+      .min(1)
+      .describe(
+        "The shell command to execute in the configured shell environment",
+      ),
+    workingDir: workingDir
+      ? z
+          .string()
+          .optional()
+          .describe(
+            "Optional working directory to execute the command in (must be under $HOME for security)",
+          )
+      : z
+          .string()
+          .describe(
+            "Working directory to execute the command in (must be under $HOME for security)",
+          ),
   },
   async ({ command, workingDir: cmdWorkingDir }) => {
     try {
