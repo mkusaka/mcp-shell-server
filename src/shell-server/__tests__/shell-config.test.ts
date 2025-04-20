@@ -39,6 +39,25 @@ vi.mock('../lib/logger.js', () => ({
   }
 }));
 
+// Mock the shell-config module for all tests
+vi.mock('../shell-config.js', () => {
+  // Default implementation that can be overridden in individual tests
+  return {
+    default: () => {
+      if (process.env.SHELL) {
+        return process.env.SHELL;
+      }
+      
+      const options = mockOpts();
+      if (options.shell) {
+        return options.shell;
+      }
+      
+      return mockPlatform() === 'win32' ? 'cmd.exe' : '/bin/bash';
+    }
+  };
+});
+
 describe('Shell configuration', () => {
   beforeEach(() => {
     // Reset all mocks
