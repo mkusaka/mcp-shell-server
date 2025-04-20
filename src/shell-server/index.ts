@@ -113,7 +113,7 @@ server.tool(
   "Executes commands in the specified shell",
   {
     command: z.string().min(1),
-    workingDir: z.string().optional()
+    workingDir: workingDir ? z.string().optional() : z.string()
   },
   async ({ command, workingDir: cmdWorkingDir }) => {
     try {
