@@ -1,6 +1,6 @@
 {
   "name": "@mkusaka/mcp-shell-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A server that uses the Model Context Protocol (MCP) to execute shell commands",
   "author": "mkusaka",
   "license": "MIT",
