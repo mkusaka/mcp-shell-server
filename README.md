@@ -57,15 +57,15 @@ Add the following to your Cursor configuration file (`~/.cursor/config.json`):
 
 ### Cline Integration
 
-[Cline](https://github.com/saoudrizwan/cline) はVS Code拡張機能で、Claude AIとMCPサーバーを利用できます。このMCPシェルサーバーをClineで設定するには：
+[Cline](https://github.com/saoudrizwan/cline) is a VS Code extension that allows you to use MCP servers with Claude AI. To set up this MCP shell server with Cline:
 
-1. Cline MCP設定ファイルを開きます：
+1. Open your Cline MCP settings file:
 
    - macOS: `~/Library/Application Support/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`
    - Windows: `%APPDATA%/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`
    - Linux: `~/.config/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`
 
-2. シェルサーバーのMCP設定を追加します：
+2. Add the shell server MCP configuration:
 
    ```json
    {
@@ -80,7 +80,7 @@ Add the following to your Cursor configuration file (`~/.cursor/config.json`):
    }
    ```
 
-   あるいは、ローカルにインストールしたパッケージを使用する場合：
+   Alternatively, if you want to use a locally installed package:
 
    ```json
    {
@@ -97,7 +97,7 @@ Add the following to your Cursor configuration file (`~/.cursor/config.json`):
 
 ### Rule Configuration
 
-AIアシスタントのルールやプロンプトに以下を追加してください：
+Add the following to your AI assistant's rules or prompt:
 
 ```
 You have MCP Shell tools at your disposal. Follow these rules regarding Shell tool usage:
