@@ -20,7 +20,11 @@ vi.mock('@modelcontextprotocol/sdk/server/mcp.js', () => {
 });
 
 // Mock other dependencies
-vi.mock('../shell-config.js', () => ({ default: vi.fn().mockReturnValue('/bin/bash') }));
+vi.mock('../shell-config.js', () => ({ 
+  default: vi.fn().mockReturnValue('/bin/bash'),
+  getWorkingDir: vi.fn().mockReturnValue('/home/test-user'),
+  isUnderHome: vi.fn().mockImplementation((path) => path.startsWith('/home/test-user'))
+}));
 vi.mock('./lib/logger.js', () => ({ logger: { info: vi.fn(), error: vi.fn() } }));
 
 describe('Shell Exec Tool', () => {

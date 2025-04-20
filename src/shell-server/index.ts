@@ -7,23 +7,26 @@ import { z } from "zod";
 import { $, ProcessOutput } from "zx";
 import { logger } from "./lib/logger.js";
 import os from "os";
-import getShell from "./shell-config.js";
+import getShell, { isUnderHome, getWorkingDir } from "./shell-config.js";
 
 // CLI configuration
 program
   .name("mcp-shell")
   .description("MCP Shell Server - A server for executing shell commands")
   .version("0.1.0")
-  .option("-s, --shell <shell>", "Specify the path to the shell to use");
+  .option("-s, --shell <shell>", "Specify the path to the shell to use")
+  .option("-w, --working-dir <directory>", "Specify the working directory for command execution");
 
 program.parse();
 
 // Get the shell to use
 const shell = getShell();
+const workingDir = getWorkingDir();
 
 // Display server information
 logger.info("MCP Shell Server started");
 logger.info(`Shell: ${shell}`);
+logger.info(`Working Directory: ${workingDir}`);
 logger.info(`Platform: ${os.platform()}`);
 logger.info(`Hostname: ${os.hostname()}`);
 logger.info(`Username: ${os.userInfo().username}`);
@@ -109,15 +112,33 @@ server.tool(
   "shell_exec",
   "Executes commands in the specified shell",
   {
-    command: z.string().min(1)
+    command: z.string().min(1),
+    workingDir: z.string().optional()
   },
-  async ({ command }) => {
+  async ({ command, workingDir: cmdWorkingDir }) => {
     try {
       logger.info(`Executing command: ${command}`);
+      
+      // Use command-specific working directory or fall back to global setting
+      const execWorkingDir = cmdWorkingDir || workingDir;
+      
+      if (execWorkingDir && !isUnderHome(execWorkingDir)) {
+        logger.error(`Working directory must be under $HOME: ${execWorkingDir}`);
+        return {
+          content: [{ 
+            type: "text", 
+            text: `Error: Working directory must be under $HOME: ${execWorkingDir}` 
+          }],
+          isError: true
+        };
+      }
       
       try {
         // Execute command using zx
         // Pass the command to the shell with -c option
+        if (execWorkingDir) {
+          $.cwd = execWorkingDir;
+        }
         const result = await $`${shell} -c ${command}`;
         
         if (result.stderr) {
